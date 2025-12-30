@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
-#include "CPP_FirstPersonController.generated.h"
+#include "CPP_ThirdPersonController.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class GAUNTLET2_API ACPP_FirstPersonController : public APlayerController
+class GAUNTLET2_API ACPP_ThirdPersonController : public APlayerController
 {
 	GENERATED_BODY()
 	

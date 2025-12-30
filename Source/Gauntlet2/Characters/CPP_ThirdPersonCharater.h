@@ -5,20 +5,23 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputAction.h"
-#include "CPP_FirstPersonCharater.generated.h"
+#include "CPP_ThirdPersonCharater.generated.h"
 
 UCLASS()
-class GAUNTLET2_API ACPP_FirstPersonCharater : public ACharacter
+class GAUNTLET2_API ACPP_ThirdPersonCharater : public ACharacter
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this character's properties
-	ACPP_FirstPersonCharater();
+	ACPP_ThirdPersonCharater();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void FellOutOfWorld(const class UDamageType& dmgType) override;
+	
+	void Respawn();
 
 public:	
 	// Called every frame
