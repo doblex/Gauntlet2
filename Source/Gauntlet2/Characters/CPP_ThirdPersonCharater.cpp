@@ -51,6 +51,11 @@ void ACPP_FirstPersonCharater::SetupPlayerInputComponent(UInputComponent* Player
 		EnhancedInput->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACPP_FirstPersonCharater::StopJump);
 	}
 	
+	if (PauseAction)
+	{
+		EnhancedInput->BindAction(PauseAction,ETriggerEvent::Triggered, this, &ACPP_FirstPersonCharater::Move);
+	}
+	
 	if (InteractAction)
 	{
 		EnhancedInput->BindAction(InteractAction, ETriggerEvent::Triggered, this, &ACPP_FirstPersonCharater::Interact);
@@ -66,7 +71,7 @@ void ACPP_FirstPersonCharater::Move(const struct FInputActionValue& Value)
 	AddMovementInput(GetActorRightVector(), Input.X);
 }
 
-void ACPP_FirstPersonCharater::Look(const struct FInputActionValue& Value)
+void ACPP_FirstPersonCharater::Look(const FInputActionValue& Value)
 {
 	const FVector2D Input = Value.Get<FVector2D>();	
 	
@@ -74,17 +79,22 @@ void ACPP_FirstPersonCharater::Look(const struct FInputActionValue& Value)
 	AddControllerPitchInput(Input.Y);
 }
 
-void ACPP_FirstPersonCharater::StartJump(const struct FInputActionValue& Value)
+void ACPP_FirstPersonCharater::StartJump(const FInputActionValue& Value)
 {
 	Jump();
 }
 
-void ACPP_FirstPersonCharater::StopJump(const struct FInputActionValue& Value)
+void ACPP_FirstPersonCharater::StopJump(const FInputActionValue& Value)
 {
 	StopJumping();
 }
 
-void ACPP_FirstPersonCharater::Interact(const struct FInputActionValue& Value)
+void ACPP_FirstPersonCharater::Pause(const FInputActionValue& value)
+{
+	//TODO: PAUSE the Game
+}
+
+void ACPP_FirstPersonCharater::Interact(const FInputActionValue& Value)
 {
 	UE_LOG(LogTemp, Warning, TEXT("ACPP_FirstPersonCharater::Interact"));
 }

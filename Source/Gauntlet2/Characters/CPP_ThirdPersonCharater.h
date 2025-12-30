@@ -37,6 +37,9 @@ public:
 	TObjectPtr<UInputAction> JumpAction;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	TObjectPtr<UInputAction> PauseAction;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	TObjectPtr<UInputAction> InteractAction;
 
 	
@@ -44,6 +47,7 @@ public:
 	void Look(const struct FInputActionValue& Value);
 	void StartJump(const struct FInputActionValue& Value);
 	void StopJump(const struct FInputActionValue& Value);
+	void Pause(const struct FInputActionValue& Value);
 	bool GetInteractable(UObject*& InteractableObject);
 	void Interact(const struct FInputActionValue& Value);
 };
