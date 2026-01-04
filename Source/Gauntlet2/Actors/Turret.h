@@ -5,16 +5,16 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Gauntlet2/Interfaces/Interactable.h"
-#include "CPP_Turret.generated.h"
+#include "Turret.generated.h"
 
 UCLASS()
-class GAUNTLET2_API ACPP_Turret : public AActor
+class GAUNTLET2_API ATurret : public AActor, public IInteractable
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ACPP_Turret();
+	ATurret();
 
 protected:
 	// Called when the game starts or when spawned

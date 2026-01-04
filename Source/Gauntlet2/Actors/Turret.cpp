@@ -1,12 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CPP_Turret.h"
+#include "Turret.h"
 
 #include "Gauntlet2/Components/ActivableColorChangeComponent.h"
 
 // Sets default values
-ACPP_Turret::ACPP_Turret()
+ATurret::ATurret()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -14,7 +14,7 @@ ACPP_Turret::ACPP_Turret()
 }
 
 // Called when the game starts or when spawned
-void ACPP_Turret::BeginPlay()
+void ATurret::BeginPlay()
 {
 	Super::BeginPlay();
 	
@@ -27,7 +27,7 @@ void ACPP_Turret::BeginPlay()
 	
 	if (IsValid(comp))
 	{
-		comp->OnActivation.BindDynamic(this, &ACPP_Turret::OnActivation);
+		comp->OnActivation.BindDynamic(this, &ATurret::OnActivation);
 	}
 	
 	for (auto Element : GetComponents())
@@ -39,7 +39,7 @@ void ACPP_Turret::BeginPlay()
 	}
 }
 
-void ACPP_Turret::SetTurretRotation()
+void ATurret::SetTurretRotation()
 {
 	if (!IsActive) return;
 	
@@ -67,12 +67,12 @@ void ACPP_Turret::SetTurretRotation()
 	}
 }
 
-void ACPP_Turret::OnActivation(bool bActivate)
+void ATurret::OnActivation(bool bActivate)
 {
 	IsActive = bActivate;
 }
 
-void ACPP_Turret::RotateToPlayerPos(float DeltaTime)
+void ATurret::RotateToPlayerPos(float DeltaTime)
 {
 	if (!bIsPlayerInRange)
 	{
@@ -101,7 +101,7 @@ void ACPP_Turret::RotateToPlayerPos(float DeltaTime)
 }
 
 // Called every frame
-void ACPP_Turret::Tick(float DeltaTime)
+void ATurret::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	SetTurretRotation();
@@ -109,7 +109,7 @@ void ACPP_Turret::Tick(float DeltaTime)
 	DrawDebugSphere(GetWorld(), GetActorLocation(), Range, 20, bIsPlayerInRange ? FColor::Emerald : FColor::Yellow);
 }
 
-void ACPP_Turret::SetActive(bool Active)
+void ATurret::SetActive(bool Active)
 {
 	IsActive = Active;
 }
