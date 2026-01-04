@@ -39,6 +39,8 @@ void AArtifact::OnInteraction()
 
 	if (!PGMesh) return;
 
+	SetActorEnableCollision(false);
+	
 	AttachToComponent(
 		PGMesh,
 		FAttachmentTransformRules::SnapToTargetNotIncludingScale,
