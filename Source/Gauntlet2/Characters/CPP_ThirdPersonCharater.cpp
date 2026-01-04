@@ -4,6 +4,9 @@
 #include "CPP_ThirdPersonCharater.h"
 #include "EnhancedInputComponent.h"
 #include "GameFramework/GameModeBase.h"
+#include "Gauntlet2/Interfaces/Interactable.h"
+#include "Kismet/KismetSystemLibrary.h"
+#include "Misc/Iteration.h"
 
 // Sets default values
 ACPP_ThirdPersonCharater::ACPP_ThirdPersonCharater()
@@ -97,8 +100,43 @@ void ACPP_ThirdPersonCharater::Pause(const FInputActionValue& value)
 
 void ACPP_ThirdPersonCharater::Interact(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemp, Warning, TEXT("ACPP_FirstPersonCharater::Interact"));
+
+	TArray<AActor*> HitResults;
+
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(this);
+	
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+	ObjectTypes.Add(UEngineTypes::ConvertToObjectType(InteractChannel));
+	
+	bool bHit = UKismetSystemLibrary::SphereOverlapActors(
+		GetWorld(),
+		GetActorLocation(),
+		InteractRange,
+		{ ObjectTypes },
+		nullptr,
+		ActorsToIgnore,
+		HitResults
+	);
+
+	if (!bHit)
+		return;
+
+	UE_LOG(LogTemp, Warning, TEXT("Interacted with %d objects"), HitResults.Num());
+	
+	for (AActor* HitActor : HitResults)
+	{
+		if (!IsValid(HitActor))
+			continue;
+
+		if (HitActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
+		{
+			IInteractable::Execute_Interact(HitActor);
+			break; // first valid interactable only
+		}
+	}
 }
+
 
 void ACPP_ThirdPersonCharater::FellOutOfWorld(const class UDamageType& dmgType)
 {

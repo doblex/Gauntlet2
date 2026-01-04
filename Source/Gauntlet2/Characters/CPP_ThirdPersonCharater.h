@@ -30,21 +30,27 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Player|Input")
 	TObjectPtr<UInputAction> MoveAction;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Player|Input")
 	TObjectPtr<UInputAction> LookAction;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Player|Input")
 	TObjectPtr<UInputAction> JumpAction;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Player|Input")
 	TObjectPtr<UInputAction> PauseAction;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Player|Input")
 	TObjectPtr<UInputAction> InteractAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Player|Interaction")
+	float InteractRange;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Interaction")
+	TEnumAsByte<ECollisionChannel> InteractChannel = ECC_GameTraceChannel1;
+	
 	
 	void Move(const struct FInputActionValue& Value);
 	void Look(const struct FInputActionValue& Value);
