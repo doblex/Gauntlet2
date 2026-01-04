@@ -14,10 +14,13 @@ class GAUNTLET2_API AOrbitatingPlatform : public AActor
 public:
 	// Sets default values for this actor's properties
 	AOrbitatingPlatform();
+	void SetPlatformPos(float DeltaTime);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	bool bCanRotate;
 	
 	TArray<USceneComponent*> PlatformsActors;
 	
@@ -27,7 +30,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformAnimation")
 	float Distance;
 	
-	
+	UFUNCTION()
+	void OnActivation(bool bActivate);
 	
 public:
 	// Called every frame
