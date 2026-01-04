@@ -43,8 +43,8 @@ void AArtifact::OnInteraction()
 	
 	AttachToComponent(
 		PGMesh,
-		FAttachmentTransformRules::SnapToTargetNotIncludingScale,
-		TEXT("VB_Hand_r")
+		FAttachmentTransformRules::SnapToTargetIncludingScale,
+		TEXT("hand_r")
 	);
 }
 
