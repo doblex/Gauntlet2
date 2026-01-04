@@ -3,6 +3,8 @@
 
 #include "CPP_Turret.h"
 
+#include "Gauntlet2/Components/ActivableColorChangeComponent.h"
+
 // Sets default values
 ACPP_Turret::ACPP_Turret()
 {
@@ -17,7 +19,17 @@ void ACPP_Turret::BeginPlay()
 	Super::BeginPlay();
 	
 	Player = GetWorld()->GetFirstPlayerController()->GetPawn();
-
+	
+	UActivableColorChangeComponent* comp = 
+		Cast<UActivableColorChangeComponent>(
+			GetComponentByClass(UActivableColorChangeComponent::StaticClass())
+			);
+	
+	if (IsValid(comp))
+	{
+		comp->OnActivation.BindDynamic(this, &ACPP_Turret::OnActivation);
+	}
+	
 	for (auto Element : GetComponents())
 	{
 		if (Element->ComponentTags.Contains(TurretPivotTag))
@@ -53,6 +65,11 @@ void ACPP_Turret::SetTurretRotation()
 			TargetRotation = Rotation;
 		}
 	}
+}
+
+void ACPP_Turret::OnActivation(bool bActivate)
+{
+	IsActive = bActivate;
 }
 
 void ACPP_Turret::RotateToPlayerPos(float DeltaTime)

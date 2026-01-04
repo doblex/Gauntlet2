@@ -48,6 +48,9 @@ protected:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Turret|Property")
 	bool IsActive;
 	
+	UFUNCTION()
+	void OnActivation(bool bActivate);
+	
 public:
 	void RotateToPlayerPos(float DeltaTime);
 	// Called every frame
