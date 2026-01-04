@@ -4,6 +4,7 @@
 #include "CPP_ThirdPersonCharater.h"
 #include "EnhancedInputComponent.h"
 #include "GameFramework/GameModeBase.h"
+#include "Gauntlet2/Components/InteractionColorChangeComponent.h"
 #include "Gauntlet2/Interfaces/Interactable.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Misc/Iteration.h"
@@ -128,10 +129,10 @@ void ACPP_ThirdPersonCharater::Interact(const FInputActionValue& Value)
 	{
 		if (!IsValid(HitActor))
 			continue;
-
-		if (HitActor->GetClass()->ImplementsInterface(UInteractable::StaticClass()))
+		UActorComponent* comp = HitActor->GetComponentByClass(UInteractionColorChangeComponent::StaticClass());
+		if (IsValid(comp))
 		{
-			IInteractable::Execute_Interact(HitActor);
+			IInteractable::Execute_Interact(comp);
 			break; // first valid interactable only
 		}
 	}
