@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Gauntlet2/Actors/BaseClasses/BaseActivateableActor.h"
 #include "OrbitatingPlatform.generated.h"
 
 UCLASS()
-class GAUNTLET2_API AOrbitatingPlatform : public AActor
+class GAUNTLET2_API AOrbitatingPlatform : public ABaseActivateableActor
 {
 	GENERATED_BODY()
 
@@ -30,8 +31,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlatformAnimation")
 	float Distance;
 	
-	UFUNCTION()
-	void OnActivation(bool bActivate);
+	void Activatable_Implementation(bool activate) override;
 	
 public:
 	// Called every frame

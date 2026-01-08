@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Gauntlet2/Actors/BaseClasses/BaseInteractableActor.h"
 #include "Artifact.generated.h"
 
 UCLASS()
-class GAUNTLET2_API AArtifact : public AActor
+class GAUNTLET2_API AArtifact : public ABaseInteractableActor
 {
 	GENERATED_BODY()
 	
@@ -20,11 +21,9 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UFUNCTION()
-	void OnInteraction();
+	virtual void Interact_Implementation() override;
 	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 };

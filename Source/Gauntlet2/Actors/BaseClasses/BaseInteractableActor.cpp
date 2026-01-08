@@ -1,0 +1,66 @@
+﻿// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "BaseInteractableActor.h"
+
+#include "Gauntlet2/Lib/BFL_Miscellaneous.h"
+
+
+// Sets default values
+ABaseInteractableActor::ABaseInteractableActor()
+{
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+}
+
+// Called when the game starts or when spawned
+void ABaseInteractableActor::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	DynamicMaterialInstance = UMaterialInstanceDynamic::Create(ParentMsaterial, this);
+	
+	if (DynamicMaterialInstance)
+	{
+		DynamicMaterialInstance->SetVectorParameterValue("Color", BaseColor);
+	}
+	
+	TArray<UStaticMeshComponent*> StaticMeshes;
+	
+	UBFL_Miscellaneous::CollectStaticMeshComponents(GetRootComponent(), StaticMeshes);
+	
+	for (auto Component : StaticMeshes)
+	{
+		Component->SetMaterial(0, DynamicMaterialInstance);
+	}
+}
+
+void ABaseInteractableActor::Interact_Implementation()
+{
+	IInteractable::Interact_Implementation();
+	
+	bIsActive = !bIsActive;
+	 
+	if (DynamicMaterialInstance)
+	{
+		DynamicMaterialInstance->SetVectorParameterValue("Color",  bIsActive ? InteractColor : BaseColor);
+	}
+}
+
+
+// Called every frame
+void ABaseInteractableActor::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
+void ABaseInteractableActor::ChangeColor(bool Active)
+{
+	if (DynamicMaterialInstance)
+	{
+		DynamicMaterialInstance->SetVectorParameterValue("Color",  Active ? InteractColor : BaseColor);
+	}
+}
+
+
+

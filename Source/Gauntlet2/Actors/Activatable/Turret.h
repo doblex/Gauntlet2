@@ -4,11 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Gauntlet2/Interfaces/Interactable.h"
+#include "Gauntlet2/Actors/BaseClasses/BaseActivateableActor.h"
+#include "Gauntlet2/Components/ActivableColorChangeComponent.h"
 #include "Turret.generated.h"
 
 UCLASS()
-class GAUNTLET2_API ATurret : public AActor, public IInteractable
+class GAUNTLET2_API ATurret : public ABaseActivateableActor
 {
 	GENERATED_BODY()
 	
@@ -25,6 +26,8 @@ protected:
 	AActor* Player;
 	UStaticMeshComponent* TurretPivot;
 	FRotator TargetRotation;
+	UActivableColorChangeComponent* ColorChangeComponent;
+	FTimerHandle TimerHandle;
 	
 	bool bIsPlayerInRange = false;
 	
@@ -43,18 +46,21 @@ protected:
 	float Range;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Turret|Property")
+	float DeactiveDuration = 10.f;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Turret|Property")
 	float ShootingTime;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Turret|Property")
-	bool IsActive;
+	bool bIsInactive;
 	
 	UFUNCTION()
-	void OnActivation(bool bActivate);
+	void OnReActivation();
+	
+	virtual void Activatable_Implementation(bool activate) override;
 	
 public:
 	void RotateToPlayerPos(float DeltaTime);
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	void SetActive(bool Active);
 };

@@ -3,6 +3,7 @@
 
 #include "Artifact.h"
 
+#include "Gauntlet2/Characters/CPP_ThirdPersonCharater.h"
 #include "Gauntlet2/Components/InteractionColorChangeComponent.h"
 
 // Sets default values
@@ -17,25 +18,21 @@ AArtifact::AArtifact()
 void AArtifact::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	UInteractionColorChangeComponent* comp = 
-		Cast<UInteractionColorChangeComponent>(
-			GetComponentByClass(UInteractionColorChangeComponent::StaticClass())
-			);
-	
-	if (IsValid(comp))
-	{
-		comp->OnInteraction.BindDynamic(this, &AArtifact::OnInteraction);
-	}
 }
 
-void AArtifact::OnInteraction()
+void AArtifact::Interact_Implementation()
 {
+	Super::Interact_Implementation();
+	
 	APawn* PG = GetWorld()->GetFirstPlayerController()->GetPawn();
 	if (!PG) return;
 
+	ACPP_ThirdPersonCharater* Charater = Cast<ACPP_ThirdPersonCharater>(PG);
+	if (!Charater) return;
+	
+	
 	USkeletalMeshComponent* PGMesh =
-		PG->FindComponentByClass<USkeletalMeshComponent>();
+		Charater->FindComponentByClass<USkeletalMeshComponent>();
 
 	if (!PGMesh) return;
 
@@ -46,6 +43,8 @@ void AArtifact::OnInteraction()
 		FAttachmentTransformRules::SnapToTargetIncludingScale,
 		TEXT("hand_r")
 	);
+	
+	Charater->Artifact = this;
 }
 
 // Called every frame

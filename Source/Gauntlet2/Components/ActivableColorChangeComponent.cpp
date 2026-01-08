@@ -45,6 +45,6 @@ void UActivableColorChangeComponent::Activatable_Implementation(bool activate)
 		DynamicMaterialInstance->SetVectorParameterValue("Color",  bIsActive ? InteractColor : BaseColor);
 	}
 	
-	OnActivation.Execute(activate);
+	OnActivation.ExecuteIfBound(activate);
 }
 

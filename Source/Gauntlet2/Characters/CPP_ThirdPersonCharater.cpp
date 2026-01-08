@@ -129,12 +129,9 @@ void ACPP_ThirdPersonCharater::Interact(const FInputActionValue& Value)
 	{
 		if (!IsValid(HitActor))
 			continue;
-		UActorComponent* comp = HitActor->GetComponentByClass(UInteractionColorChangeComponent::StaticClass());
-		if (IsValid(comp))
-		{
-			IInteractable::Execute_Interact(comp);
-			break; // first valid interactable only
-		}
+		
+		IInteractable::Execute_Interact(HitActor);
+		break; // first valid interactable only
 	}
 }
 

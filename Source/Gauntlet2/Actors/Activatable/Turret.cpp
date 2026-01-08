@@ -3,8 +3,6 @@
 
 #include "Turret.h"
 
-#include "Gauntlet2/Components/ActivableColorChangeComponent.h"
-
 // Sets default values
 ATurret::ATurret()
 {
@@ -20,16 +18,6 @@ void ATurret::BeginPlay()
 	
 	Player = GetWorld()->GetFirstPlayerController()->GetPawn();
 	
-	UActivableColorChangeComponent* comp = 
-		Cast<UActivableColorChangeComponent>(
-			GetComponentByClass(UActivableColorChangeComponent::StaticClass())
-			);
-	
-	if (IsValid(comp))
-	{
-		comp->OnActivation.BindDynamic(this, &ATurret::OnActivation);
-	}
-	
 	for (auto Element : GetComponents())
 	{
 		if (Element->ComponentTags.Contains(TurretPivotTag))
@@ -41,7 +29,7 @@ void ATurret::BeginPlay()
 
 void ATurret::SetTurretRotation()
 {
-	if (!IsActive) return;
+	if (bIsInactive) return;
 	
 	if (!Player) return;
 	
@@ -67,9 +55,35 @@ void ATurret::SetTurretRotation()
 	}
 }
 
-void ATurret::OnActivation(bool bActivate)
+void ATurret::OnReActivation()
 {
-	IsActive = bActivate;
+	if (!bIsInactive) return; 
+	
+	Activatable_Implementation(false);
+}
+
+void ATurret::Activatable_Implementation(bool activate)
+{
+	Super::Activatable_Implementation(activate);
+	
+	if (!activate)
+	{
+		bIsInactive = false;
+		return;
+	}
+	
+	if (IsValid(ColorChangeComponent))
+	{
+		GetWorld()->GetTimerManager().SetTimer
+		(
+			TimerHandle,
+			this,
+			&ATurret::OnReActivation,
+			DeactiveDuration
+			);
+	}
+	
+	bIsInactive = true;
 }
 
 void ATurret::RotateToPlayerPos(float DeltaTime)
@@ -107,10 +121,5 @@ void ATurret::Tick(float DeltaTime)
 	SetTurretRotation();
 	RotateToPlayerPos(DeltaTime);
 	DrawDebugSphere(GetWorld(), GetActorLocation(), Range, 20, bIsPlayerInRange ? FColor::Emerald : FColor::Yellow);
-}
-
-void ATurret::SetActive(bool Active)
-{
-	IsActive = Active;
 }
 

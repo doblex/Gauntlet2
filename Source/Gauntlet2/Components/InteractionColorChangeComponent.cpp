@@ -45,6 +45,6 @@ void UInteractionColorChangeComponent::Interact_Implementation()
 		DynamicMaterialInstance->SetVectorParameterValue("Color",  bIsActive ? InteractColor : BaseColor);
 	}
 	
-	OnInteraction.Execute();
+	OnInteraction.ExecuteIfBound();
 }
 

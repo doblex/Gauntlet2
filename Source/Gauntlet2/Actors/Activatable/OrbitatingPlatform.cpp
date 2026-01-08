@@ -19,26 +19,18 @@ void AOrbitatingPlatform::BeginPlay()
 	Super::BeginPlay();
 	
 	USceneComponent* root = GetRootComponent();
-	
-	UActivableColorChangeComponent* comp = 
-		Cast<UActivableColorChangeComponent>(
-			GetComponentByClass(UActivableColorChangeComponent::StaticClass())
-			);
-	
-	if (IsValid(comp))
-	{
-		comp->OnActivation.BindDynamic(this, &AOrbitatingPlatform::OnActivation);
-		bCanRotate = false;
-	}
-	
 	root->GetChildrenComponents(false, PlatformsActors);
+	
+	bCanRotate = false;
 	
 	SetPlatformPos(0);
 }
 
-void AOrbitatingPlatform::OnActivation(bool bActivate)
+void AOrbitatingPlatform::Activatable_Implementation(bool activate)
 {
-	bCanRotate = bActivate;
+	Super::Activatable_Implementation(activate);
+	
+	bCanRotate = activate;
 }
 
 // Called every frame

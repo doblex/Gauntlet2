@@ -7,6 +7,8 @@
 #include "InputAction.h"
 #include "CPP_ThirdPersonCharater.generated.h"
 
+class AArtifact;
+
 UCLASS()
 class GAUNTLET2_API ACPP_ThirdPersonCharater : public ACharacter
 {
@@ -51,12 +53,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Interaction")
 	TEnumAsByte<ECollisionChannel> InteractChannel = ECC_GameTraceChannel1;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player|Inventory")
+	AArtifact* Artifact;
 	
 	void Move(const struct FInputActionValue& Value);
 	void Look(const struct FInputActionValue& Value);
 	void StartJump(const struct FInputActionValue& Value);
 	void StopJump(const struct FInputActionValue& Value);
 	void Pause(const struct FInputActionValue& Value);
-	bool GetInteractable(UObject*& InteractableObject);
 	void Interact(const struct FInputActionValue& Value);
 };
