@@ -15,6 +15,8 @@ class GAUNTLET2_API UQuestEffectDataAsset : public UDataAsset
 	GENERATED_BODY()
 	
 public:
+	UQuestEffectDataAsset();
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
 	TSoftObjectPtr<UNiagaraSystem> CompletionVFX;
 

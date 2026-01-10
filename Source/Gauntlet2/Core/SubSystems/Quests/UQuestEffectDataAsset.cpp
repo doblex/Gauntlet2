@@ -2,3 +2,9 @@
 
 
 #include "UQuestEffectDataAsset.h"
+
+UQuestEffectDataAsset::UQuestEffectDataAsset()
+{
+	CompletionVFX = nullptr;
+	CompletionSound = nullptr;
+}
