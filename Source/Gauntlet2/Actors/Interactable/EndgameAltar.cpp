@@ -5,7 +5,6 @@
 
 #include "Artifact.h"
 #include "Gauntlet2/Characters/CPP_ThirdPersonCharater.h"
-#include "Gauntlet2/Components/InteractionColorChangeComponent.h"
 #include "Gauntlet2/Core/SubSystems/Quests/QuestSubsystem.h"
 
 

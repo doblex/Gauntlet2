@@ -4,7 +4,6 @@
 #include "Artifact.h"
 
 #include "Gauntlet2/Characters/CPP_ThirdPersonCharater.h"
-#include "Gauntlet2/Components/InteractionColorChangeComponent.h"
 
 // Sets default values
 AArtifact::AArtifact()

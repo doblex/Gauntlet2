@@ -25,9 +25,20 @@ void ABaseActivateableActor::BeginPlay()
 		DynamicMaterialInstance->SetVectorParameterValue("Color", BaseColor);
 	}
 	
-	TArray<UStaticMeshComponent*> StaticMeshes;
+	ColorRootComponent = 
+		Cast<USceneComponent>(
+			GetComponentsByTag(USceneComponent::StaticClass() ,ColorRootTag)[0]
+			);
 	
-	UBFL_Miscellaneous::CollectStaticMeshComponents(GetRootComponent(), StaticMeshes);
+	TArray<UStaticMeshComponent*> StaticMeshes;
+	if (IsValid(ColorRootComponent))
+	{
+		UBFL_Miscellaneous::CollectStaticMeshComponents(ColorRootComponent, StaticMeshes);
+	}
+	else
+	{
+		UBFL_Miscellaneous::CollectStaticMeshComponents(GetRootComponent(), StaticMeshes);
+	}
 	
 	for (auto Component : StaticMeshes)
 	{

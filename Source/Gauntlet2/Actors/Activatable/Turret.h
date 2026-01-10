@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Gauntlet2/Actors/BaseClasses/BaseActivateableActor.h"
-#include "Gauntlet2/Components/ActivableColorChangeComponent.h"
 #include "Turret.generated.h"
 
 UCLASS()
@@ -26,7 +25,6 @@ protected:
 	AActor* Player;
 	UStaticMeshComponent* TurretPivot;
 	FRotator TargetRotation;
-	UActivableColorChangeComponent* ColorChangeComponent;
 	FTimerHandle TimerHandle;
 	
 	bool bIsPlayerInRange = false;

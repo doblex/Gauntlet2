@@ -4,7 +4,6 @@
 #include "CPP_ThirdPersonCharater.h"
 #include "EnhancedInputComponent.h"
 #include "GameFramework/GameModeBase.h"
-#include "Gauntlet2/Components/InteractionColorChangeComponent.h"
 #include "Gauntlet2/Interfaces/Interactable.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Misc/Iteration.h"

@@ -72,16 +72,13 @@ void ATurret::Activatable_Implementation(bool activate)
 		return;
 	}
 	
-	if (IsValid(ColorChangeComponent))
-	{
-		GetWorld()->GetTimerManager().SetTimer
-		(
-			TimerHandle,
-			this,
-			&ATurret::OnReActivation,
-			DeactiveDuration
-			);
-	}
+	GetWorld()->GetTimerManager().SetTimer
+	(
+		TimerHandle,
+		this,
+		&ATurret::OnReActivation,
+		DeactiveDuration
+		);
 	
 	bIsInactive = true;
 }

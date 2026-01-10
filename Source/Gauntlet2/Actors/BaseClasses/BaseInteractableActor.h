@@ -22,11 +22,12 @@ protected:
 	
 	virtual void Interact_Implementation() override;
 	
-	void ChangeColor(bool Active);
+
 	
 	bool bIsActive;
 	
 	UMaterialInstanceDynamic* DynamicMaterialInstance;
+	USceneComponent* ColorRootComponent;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Interaction Component")
 	UMaterialInterface* ParentMsaterial;
@@ -36,6 +37,11 @@ protected:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Interaction Component")
 	FColor InteractColor;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Interaction Component")
+	FName ColorRootTag = FName("ColorRoot");
+	
+	void ChangeColor(bool Active);
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

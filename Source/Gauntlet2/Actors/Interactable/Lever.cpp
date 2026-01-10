@@ -3,9 +3,7 @@
 
 #include "Lever.h"
 
-#include "Gauntlet2/Components/ActivableColorChangeComponent.h"
-#include "Gauntlet2/Components/InteractionColorChangeComponent.h"
-#include "Misc/MapErrors.h"
+#include "Gauntlet2/Interfaces/Activatable.h"
 
 // Sets default values
 ALever::ALever()

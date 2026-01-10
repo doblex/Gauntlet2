@@ -20,21 +20,25 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	void ChangeColor(bool Active);
-	
 	bool bIsActive;
 	
 	UMaterialInstanceDynamic* DynamicMaterialInstance;
+	USceneComponent* ColorRootComponent;
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Interaction Component")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Activable Component")
 	UMaterialInterface* ParentMsaterial;
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Interaction Component")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Activable Component")
 	FColor BaseColor;
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Interaction Component")
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Activable Component")
 	FColor InteractColor;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Activable Component")
+	FName ColorRootTag = FName("ColorRoot");
 
+	void ChangeColor(bool Active);
+	
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

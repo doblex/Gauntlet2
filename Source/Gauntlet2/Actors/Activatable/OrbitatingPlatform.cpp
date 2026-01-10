@@ -3,8 +3,6 @@
 
 #include "OrbitatingPlatform.h"
 
-#include "Gauntlet2/Components/ActivableColorChangeComponent.h"
-
 
 // Sets default values
 AOrbitatingPlatform::AOrbitatingPlatform()
