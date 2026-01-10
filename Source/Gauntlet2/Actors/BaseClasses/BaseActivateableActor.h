@@ -36,7 +36,7 @@ protected:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Activable Component")
 	FName ColorRootTag = FName("ColorRoot");
-
+	
 	void ChangeColor(bool Active);
 	
 public:
