@@ -17,11 +17,12 @@ void AOrbitatingPlatform::BeginPlay()
 	Super::BeginPlay();
 	
 	USceneComponent* root = GetRootComponent();
-	root->GetChildrenComponents(false, PlatformsActors);
 	
+	//Ho necessità sia in radianti per come funziona seno e coseno
+	AngleStep = (2.0f * PI)/PlatformNumber;
 	bCanRotate = false;
 	
-	SetPlatformPos(0);
+	SpawnPlatforms();
 }
 
 void AOrbitatingPlatform::Activatable_Implementation(bool activate)
@@ -44,20 +45,37 @@ void AOrbitatingPlatform::Tick(float DeltaTime)
 	DrawDebugSphere(GetWorld(), GetActorLocation(), 2.f, 10, FColor::Purple);
 }
 
+void AOrbitatingPlatform::SpawnPlatforms()
+{
+	const FActorSpawnParameters SpawnParameters;
+	
+	for (int i = 0; i < PlatformNumber; i++)
+	{
+		float x =  FMath::Sin(AngleStep * (i+1)) * Distance;
+		float y =  FMath::Cos(AngleStep * (i+1)) * Distance;
+		FVector pos = FVector(x, y, 0);
+		FRotator rot = FRotator(0, 0, 0); 
+		
+		AActor* platform = GetWorld()->SpawnActor<AActor>(PlatformActor, pos, rot, SpawnParameters);
+		
+		platform->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+		
+		PlatformsActors.Add(platform);
+	}
+}
+
+PRAGMA_DISABLE_OPTIMIZATION
 void AOrbitatingPlatform::SetPlatformPos(float DeltaTime)
 {
-	float FrameOffset = DeltaTime * AnimationSpeed;
-	
-	float angle = 360/PlatformsActors.Num();
-	float x = 0;
-	float y = 0;
-	FVector pos = FVector(0,0,0);
+	//Trasformo l'offest in radianti
+	float FrameOffset = FMath::DegreesToRadians(DeltaTime * AnimationSpeed);
 	
 	for (int i = 0; i < PlatformsActors.Num(); i++)
 	{
-		x =  FMath::Sin(angle*i + FrameOffset) * Distance;
-		y =  FMath::Cos(angle*i + FrameOffset) * Distance;
-		pos.Set(x, y, 0);
-		PlatformsActors[i]->SetRelativeLocation(pos);
+		float x =  FMath::Sin(AngleStep * (i+1) + FrameOffset) * Distance;
+		float y =  FMath::Cos(AngleStep * (i+1) + FrameOffset) * Distance;
+		FVector pos = FVector(x, y, 0);
+		PlatformsActors[i]->SetActorRelativeLocation(pos);
 	}
 }
+PRAGMA_ENABLE_OPTIMIZATION
