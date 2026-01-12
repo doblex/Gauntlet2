@@ -2,6 +2,7 @@
 
 
 #include "Turret.h"
+#include "Gauntlet2/Core/SubSystems/ObjectPooler/ObjectPoolerSubsystem.h"
 
 // Sets default values
 ATurret::ATurret()
@@ -16,6 +17,9 @@ void ATurret::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	ObjPoolSys = GetWorld()->GetGameInstance()->GetSubsystem<UObjectPoolerSubsystem>();
+	ObjPoolSys->AddPool(ActorToSpawn, PoolSize);
+	
 	Player = GetWorld()->GetFirstPlayerController()->GetPawn();
 	
 	for (auto Element : GetComponents())
@@ -23,6 +27,11 @@ void ATurret::BeginPlay()
 		if (Element->ComponentTags.Contains(TurretPivotTag))
 		{
 			TurretPivot = Cast<UStaticMeshComponent>(Element);
+		}
+		
+		if (Element->ComponentTags.Contains(ShotingPointTag))
+		{
+			ShootingPoint = Cast<USceneComponent>(Element);
 		}
 	}
 }
@@ -87,16 +96,16 @@ void ATurret::RotateToPlayerPos(float DeltaTime)
 {
 	if (!bIsPlayerInRange)
 	{
-		if (timer < 0.f)
+		if (RotationTimer < 0.f)
 		{
-			timer = RandomChangeTimer;
+			RotationTimer = RandomChangeTimer;
 		
 			FVector EulerRotation = FVector(0,0, FMath::RandRange(-180.0f, 180.0f));
 		
 			TargetRotation = FRotator::MakeFromEuler(EulerRotation);
 		}
 		
-		timer -= DeltaTime;
+		RotationTimer -= DeltaTime;
 	}
 	
 	if (!IsValid(TurretPivot)) return;
@@ -105,10 +114,39 @@ void ATurret::RotateToPlayerPos(float DeltaTime)
 	TurretPivot->GetRelativeRotation(),
 	TargetRotation,
 	DeltaTime,
-	MovementSpeed
+	RotationSpeed
 );
 	
 	TurretPivot->SetRelativeRotation(NewRotation);
+}
+
+void ATurret::Shoot(float DeltaTime)
+{
+	if (!bIsPlayerInRange || bIsInactive) return;
+	
+	if (ShootingTimer > ShootingTime)
+	{
+		ShootingTimer = 0.f;
+		
+		TScriptInterface<IObjectPoolInterface> Spawned = ObjPoolSys->GetObjectFromPool(ActorToSpawn);
+		
+		FTransform SpawnTransform = ShootingPoint->GetComponentTransform();
+		
+		if (Spawned)
+		{
+			FObjectPoolActivateData Data;
+			Data.ObjectPoolTransform = 
+				FTransform(
+					SpawnTransform.Rotator(),
+					SpawnTransform.GetLocation(),
+					SpawnScale
+					);
+		
+			Spawned.GetInterface()->Activate(Data);
+		}
+	}
+	
+	ShootingTimer += DeltaTime;
 }
 
 // Called every frame
@@ -117,6 +155,21 @@ void ATurret::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	SetTurretRotation();
 	RotateToPlayerPos(DeltaTime);
+	Shoot(DeltaTime);
+	
+	if (GEngine)
+	{
+		const int Pooled = ObjPoolSys->GetUsablePoolSize(ActorToSpawn);
+		const int Active = ObjPoolSys->GetActivePoolSize(ActorToSpawn);
+		
+		GEngine->AddOnScreenDebugMessage(
+			1,
+			5.f,
+			FColor::Green,
+			FString::Printf(TEXT("%i Active / %i Usable"), Active, Pooled)
+		);
+	}
+	
 	DrawDebugSphere(GetWorld(), GetActorLocation(), Range, 20, bIsPlayerInRange ? FColor::Emerald : FColor::Yellow);
 }
 

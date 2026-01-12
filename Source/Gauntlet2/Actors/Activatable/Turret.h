@@ -7,6 +7,8 @@
 #include "Gauntlet2/Actors/BaseClasses/BaseActivateableActor.h"
 #include "Turret.generated.h"
 
+class UObjectPoolerSubsystem;
+
 UCLASS()
 class GAUNTLET2_API ATurret : public ABaseActivateableActor
 {
@@ -21,24 +23,33 @@ protected:
 	virtual void BeginPlay() override;
 
 	void SetTurretRotation();
-	
-	AActor* Player;
-	UStaticMeshComponent* TurretPivot;
-	FRotator TargetRotation;
-	FTimerHandle TimerHandle;
+	void RotateToPlayerPos(float DeltaTime);
+	void Shoot(float DeltaTime);
 	
 	bool bIsPlayerInRange = false;
 	
-	float timer;
+	float RotationTimer;
+	float ShootingTimer;
+	
+	AActor* Player;
+	UStaticMeshComponent* TurretPivot;
+	USceneComponent* ShootingPoint;
+	FRotator TargetRotation;
+	FTimerHandle TimerHandle;
+	UObjectPoolerSubsystem* ObjPoolSys;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Turret|Movement")
-	float MovementSpeed = 2.f;
+	float RotationSpeed = 2.f;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Turret|Movement")
 	float RandomChangeTimer = 5.f;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Turret")
 	FName TurretPivotTag = "TurretPivot";
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Turret")
+	FName ShotingPointTag = "ShootingPoint";
+	
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Turret|Property")
 	float Range;
@@ -47,10 +58,19 @@ protected:
 	float DeactiveDuration = 10.f;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Turret|Property")
+	bool bIsInactive;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Turret|Shooting")
 	float ShootingTime;
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="Turret|Property")
-	bool bIsInactive;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Turret|Shooting")
+	TSubclassOf<AActor> ActorToSpawn;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Turret|Shooting")
+	FVector SpawnScale = FVector(1.0f, 1.0f, 1.0f);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Turret|Shooting")
+	int32 PoolSize = 1;
 	
 	UFUNCTION()
 	void OnReActivation();
@@ -58,7 +78,7 @@ protected:
 	virtual void Activatable_Implementation(bool activate) override;
 	
 public:
-	void RotateToPlayerPos(float DeltaTime);
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 };
