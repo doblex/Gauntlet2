@@ -5,6 +5,7 @@
 
 #include "Artifact.h"
 #include "Gauntlet2/Characters/CPP_ThirdPersonCharater.h"
+#include "Gauntlet2/Core/CoreGameInstance.h"
 #include "Gauntlet2/Core/SubSystems/Quests/QuestSubsystem.h"
 
 
@@ -23,6 +24,8 @@ void AEndgameAltar::BeginPlay()
 	TArray<UActorComponent*> comps;
 	comps = GetComponentsByTag(USceneComponent::StaticClass(),PivotTag);
 	
+	bHasArtifact = false;
+	
 	if (comps.Num() != 0)
 	{
 		PivotComponent = Cast<USceneComponent>(comps[0]);
@@ -31,6 +34,8 @@ void AEndgameAltar::BeginPlay()
 
 void AEndgameAltar::Interact_Implementation()
 {
+	if (bHasArtifact) return;
+	
 	Super::Interact_Implementation();
 	
 	APawn* PG = GetWorld()->GetFirstPlayerController()->GetPawn();
@@ -42,7 +47,23 @@ void AEndgameAltar::Interact_Implementation()
 	
 	Charater->Artifact->AttachToComponent(PivotComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 	
+	bHasArtifact = true;
+	
 	GetGameInstance()->GetSubsystem<UQuestSubsystem>()->CompleteQuest(this);
+	
+	GetWorld()->GetTimerManager().SetTimer(
+		TimerHandle, 
+		this, 
+		&AEndgameAltar::EndGame, 
+		SecondsToEndGame, 
+		false
+		);
+}
+
+void AEndgameAltar::EndGame()
+{
+	UCoreGameInstance* GM = Cast<UCoreGameInstance>(GetGameInstance());
+	GM->GoToMenu();
 }
 
 // Called every frame

@@ -19,14 +19,23 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	virtual void Interact_Implementation() override;
+	bool bHasArtifact = false;
+	
+	USceneComponent* PivotComponent;
+	FTimerHandle TimerHandle;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = "Interaction")
 	FName PivotTag;
 	
-	USceneComponent* PivotComponent;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = "Interaction")
+	float SecondsToEndGame = 5.f;
+	
+	UFUNCTION()
+	void EndGame();
+	
 	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	virtual void Interact_Implementation() override;
 };
