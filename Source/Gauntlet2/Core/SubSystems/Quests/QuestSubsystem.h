@@ -27,11 +27,15 @@ protected:
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "QuestSubsystem")
 	int QuestIndex = 0;
+
 	
 public:
 	FOnQuestCompleted OnQuestCompleted;
 	
 	void CompleteQuest(AActor* Actor);
+	
 	bool GetCurrentQuest(FQuestDetailRow*& Out);
 	
+	UFUNCTION(BlueprintCallable, Category = "QuestSubsystem")
+	FQuestDetailRow& GetCurrentQuest();
 };

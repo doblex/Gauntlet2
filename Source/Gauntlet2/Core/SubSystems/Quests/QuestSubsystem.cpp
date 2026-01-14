@@ -5,6 +5,7 @@
 
 #include "UQuestEffectDataAsset.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Blueprint/UserWidget.h"
 #include "Engine/AssetManager.h"
 #include "Engine/StreamableManager.h"
 #include "Gauntlet2/Core/DevSettings/QuestDevSettings.h"
@@ -93,4 +94,11 @@ bool UQuestSubsystem::GetCurrentQuest( FQuestDetailRow*& Out)
 	static const FString ContextString(TEXT("UQuestSubsystem::GetCurrentQuest"));
 	Out = QuestTable->FindRow<FQuestDetailRow>(FName("0"),ContextString);
 	return Out != nullptr;
+}
+
+FQuestDetailRow& UQuestSubsystem::GetCurrentQuest()
+{
+	static const FString ContextString(TEXT("UQuestSubsystem::GetCurrentQuest"));
+	FQuestDetailRow* CurrentRow = QuestTable->FindRow<FQuestDetailRow>(FName("0"),ContextString);
+	return *CurrentRow;
 }

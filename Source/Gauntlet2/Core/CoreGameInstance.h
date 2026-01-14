@@ -9,18 +9,23 @@
 /**
  * 
  */
+DECLARE_DYNAMIC_DELEGATE(FOnLevelLoaded);
+
 UCLASS()
 class GAUNTLET2_API UCoreGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 	
 protected:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSoftObjectPtr<UWorld> LevelReference;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TSoftObjectPtr<UWorld> MenuReference;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FOnLevelLoaded OnLevelLoaded;
+	
 public:
 	UFUNCTION(BlueprintCallable)
 	void GoToMenu();

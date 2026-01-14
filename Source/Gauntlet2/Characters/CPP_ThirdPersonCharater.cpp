@@ -4,6 +4,8 @@
 #include "CPP_ThirdPersonCharater.h"
 #include "EnhancedInputComponent.h"
 #include "GameFramework/GameModeBase.h"
+#include "Gauntlet2/Core/CPP_ThirdPersonController.h"
+#include "Gauntlet2/Core/HUD/MainLevelHUD.h"
 #include "Gauntlet2/Interfaces/Interactable.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Misc/Iteration.h"
@@ -57,7 +59,7 @@ void ACPP_ThirdPersonCharater::SetupPlayerInputComponent(UInputComponent* Player
 	
 	if (PauseAction)
 	{
-		EnhancedInput->BindAction(PauseAction,ETriggerEvent::Triggered, this, &ACPP_ThirdPersonCharater::Move);
+		EnhancedInput->BindAction(PauseAction,ETriggerEvent::Triggered, this, &ACPP_ThirdPersonCharater::Pause);
 	}
 	
 	if (InteractAction)
@@ -95,12 +97,21 @@ void ACPP_ThirdPersonCharater::StopJump(const FInputActionValue& Value)
 
 void ACPP_ThirdPersonCharater::Pause(const FInputActionValue& value)
 {
-	//TODO: PAUSE the Game
+	ACPP_ThirdPersonController* PC = Cast<ACPP_ThirdPersonController> (GetController());
+	
+	if (PC)
+	{
+		AMainLevelHUD* HUD = Cast<AMainLevelHUD>(PC->GetHUD());
+		
+		if (HUD)
+		{
+			HUD->Pause(true);
+		}
+	}
 }
 
 void ACPP_ThirdPersonCharater::Interact(const FInputActionValue& Value)
 {
-
 	TArray<AActor*> HitResults;
 
 	TArray<AActor*> ActorsToIgnore;

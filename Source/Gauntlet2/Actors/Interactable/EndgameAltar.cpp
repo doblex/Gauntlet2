@@ -36,14 +36,14 @@ void AEndgameAltar::Interact_Implementation()
 {
 	if (bHasArtifact) return;
 	
-	Super::Interact_Implementation();
-	
 	APawn* PG = GetWorld()->GetFirstPlayerController()->GetPawn();
 	if (!PG) return;
 	
 	ACPP_ThirdPersonCharater* Charater = Cast<ACPP_ThirdPersonCharater>(PG);
 	
 	if (Charater->Artifact == nullptr) return;
+	
+	Super::Interact_Implementation();
 	
 	Charater->Artifact->AttachToComponent(PivotComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
 	

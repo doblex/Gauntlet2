@@ -8,7 +8,18 @@ public class Gauntlet2 : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "Niagara", "DeveloperSettings" });
+		PublicDependencyModuleNames.AddRange(new string[] 
+		{ 
+			"Core",
+			"CoreUObject",
+			"Engine",
+			"InputCore",
+			"EnhancedInput",
+			"Niagara",
+			"DeveloperSettings",
+			"UMG", 
+			"Slate", 
+			"SlateCore" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
